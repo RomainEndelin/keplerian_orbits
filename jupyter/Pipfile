@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+jupyterlab = "*"
+ipywidgets = ">=7.5"
+pre-commit = "*"
+isort = "*"
+black = "==19.10b0"
+flake8 = "*"
+
+[packages]
+numpy = "*"
+scipy = "*"
+sympy = "*"
+plotly = "*"
+pandas = "*"
+
+[requires]
+python_version = "3.8"
