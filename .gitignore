@@ -1,3 +1,6 @@
 .ipynb_checkpoints
+.jupyter_symlinks
+.lsp_symlink
+.virtual_documents
 __pycache__/
 /build/
