@@ -1,10 +1,11 @@
-from engine.computations import compute_eccentric_anomaly
 from sympy import Ellipse, Function
 from sympy import Point as Point2D
 from sympy import acos, atan, cos, pi, sin, sqrt, symbols, tan
 from sympy.physics.units import gravitational_constant as G
 from sympy.physics.vector import ReferenceFrame
 from sympy.utilities.lambdify import implemented_function
+
+from engine.computations import compute_eccentric_anomaly
 
 anomaly, t = symbols("anomaly t")
 

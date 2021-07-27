@@ -1,6 +1,8 @@
-from functools import cached_property
 import math
+from functools import cached_property
+
 import numpy as np
+
 from engine.constants import G
 
 

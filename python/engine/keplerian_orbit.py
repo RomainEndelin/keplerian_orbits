@@ -1,10 +1,12 @@
 from functools import cached_property
-from engine.symbolic_orbit import SymbolicOrbit
-from engine.symbolic_orbit_projection import SymbolicOrbitProjection
-from engine.functions import t, anomaly
-from engine.constants import G
+
 import numpy as np
 from sympy.utilities.lambdify import lambdify
+
+from engine.constants import G
+from engine.functions import anomaly, t
+from engine.symbolic_orbit import SymbolicOrbit
+from engine.symbolic_orbit_projection import SymbolicOrbitProjection
 
 
 class KeplerianOrbit:

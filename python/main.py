@@ -1,7 +1,7 @@
 from engine.body import Body
-from engine.system import System
 from engine.circular_orbit import CircularOrbit
 from engine.plot import plot_orbits
+from engine.system import System
 
 
 def main():

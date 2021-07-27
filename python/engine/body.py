@@ -1,4 +1,5 @@
 from functools import cached_property
+
 from engine.symbolic_body import SymbolicBody
 
 

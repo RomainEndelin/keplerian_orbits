@@ -1,6 +1,14 @@
 {
     "python.defaultInterpreterPath": "/Users/rendelin/.local/share/virtualenvs/python-WCRpOmig/bin/python",
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.python",
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.sortImports.args": [
+        "--profile", "black"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    }
 }

@@ -1,6 +1,8 @@
 from functools import cached_property
-from engine.functions import OrbitalFrame, OrbitalPeriod, EllipseInFrame
+
 from sympy import symbols
+
+from engine.functions import EllipseInFrame, OrbitalFrame, OrbitalPeriod
 
 
 class SymbolicOrbit:
