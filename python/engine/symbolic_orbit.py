@@ -2,6 +2,7 @@ from functools import cached_property
 from engine.functions import OrbitalFrame, OrbitalPeriod, EllipseInFrame
 from sympy import symbols
 
+
 class SymbolicOrbit:
     def __init__(self, primary_body, secondary_body):
         self.primary_body = primary_body
@@ -32,9 +33,9 @@ class SymbolicOrbit:
 
     @cached_property
     def orbital_ellipse_point(self):
-        anomaly = symbols('anomaly')
+        anomaly = symbols("anomaly")
         # TODO: EllipseInFrame should be relative to primary body's point
         return EllipseInFrame(
             self.orbital_frame, self.semimajor_axis, self.eccentricity, anomaly
         ).express(self.primary_body.equatorial_frame)
-    
+

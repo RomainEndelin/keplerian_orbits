@@ -1,6 +1,7 @@
 from sympy import symbols
 from sympy.physics.vector import ReferenceFrame
 
+
 class SymbolicBody:
     def __init__(self, name):
         self.name = name

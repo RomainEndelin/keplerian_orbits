@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import optimize
 
+
 def eccentric_anomaly_solution(eccentric_anomaly, eccentricity, mean_anomaly):
     return eccentric_anomaly - eccentricity * np.sin(eccentric_anomaly) - mean_anomaly
 

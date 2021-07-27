@@ -3,6 +3,7 @@ from engine.system import System
 from engine.circular_orbit import CircularOrbit
 from engine.plot import plot_orbits
 
+
 def main():
     sun = Body("Sun", mass=100)
     earth = Body("Earth", mass=5)
@@ -38,23 +39,21 @@ def main():
             sun,
             [
                 [earth, sun_earth_circular_orbital_element],
-                [mars, sun_mars_circular_orbital_element]
+                [mars, sun_mars_circular_orbital_element],
             ],
-            OrbitalEngine=CircularOrbit
+            OrbitalEngine=CircularOrbit,
         )
     else:
         system = System(
             sun,
-            [
-                [earth, sun_earth_orbital_elements],
-                [mars, sun_mars_orbital_elements]
-            ]
+            [[earth, sun_earth_orbital_elements], [mars, sun_mars_orbital_elements]],
         )
 
     t_val = 5
 
     fig = plot_orbits(system, t_val)
     fig.show()
+
 
 if __name__ == "__main__":
     main()

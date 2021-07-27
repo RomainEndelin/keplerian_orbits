@@ -6,7 +6,8 @@ from sympy.physics.units import gravitational_constant as G
 from sympy.physics.vector import ReferenceFrame
 from sympy.utilities.lambdify import implemented_function
 
-anomaly, t = symbols('anomaly t')
+anomaly, t = symbols("anomaly t")
+
 
 def OrbitalFrame(
     name, equatorial_frame, longitude_ascending_node, inclination, argument_of_periapsis
