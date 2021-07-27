@@ -1,9 +1,11 @@
 {
     "python.defaultInterpreterPath": "/Users/rendelin/.local/share/virtualenvs/python-WCRpOmig/bin/python",
+    "python.linting.flake8Enabled": true,
     "editor.formatOnSave": true,
     "python.formatting.provider": "black",
     "python.sortImports.args": [
-        "--profile", "black"
+        "--profile",
+        "black"
     ],
     "[python]": {
         "editor.defaultFormatter": "ms-python.python",

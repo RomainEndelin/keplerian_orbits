@@ -40,4 +40,3 @@ class SymbolicOrbit:
         return EllipseInFrame(
             self.orbital_frame, self.semimajor_axis, self.eccentricity, anomaly
         ).express(self.primary_body.equatorial_frame)
-
