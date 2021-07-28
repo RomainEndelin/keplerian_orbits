@@ -8,12 +8,8 @@ jupyterlab = "*"
 ipywidgets = ">=7.5"
 pre-commit = "*"
 isort = "*"
-black = "==19.10b0"
+black = "*"
 flake8 = "*"
-jupyterlab-git = "*"
-jupyterlab-code-formatter = "*"
-jupyterlab-lsp = "*"
-python-language-server = {git = "https://github.com/krassowski/python-language-server.git"}
 
 [packages]
 numpy = "*"

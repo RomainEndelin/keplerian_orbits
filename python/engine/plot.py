@@ -30,6 +30,6 @@ def plot_orbits(system, t):
 
     fig = go.Figure(data=[bodies, *trajectories])
     fig.update_layout(
-        scene=dict(xaxis=dict(nticks=4), yaxis=dict(nticks=4), zaxis=dict(nticks=4),)
+        scene=dict(xaxis=dict(nticks=4), yaxis=dict(nticks=4), zaxis=dict(nticks=4))
     )
     return fig
