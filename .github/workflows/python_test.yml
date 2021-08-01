@@ -1,0 +1,53 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      PIPENV_CACHE_DIR: ~/.cache/pipenv
+
+    defaults:
+      run:
+        working-directory: python
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+      # - id: cache-pipenv
+      #   uses: actions/cache@v1
+      #   with:
+      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          # # This path is specific to Ubuntu
+          path: ~/.cache/pipenv
+          # path: python/.venv
+          # Look to see if there is a cache hit for the corresponding requirements file
+          # Working-directory does not work here in combination with "uses:"
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('python/Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pipenv-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        run: |
+          pipenv install --system --deploy --dev
+      - name: Lint with flake8
+        run: |
+          flake8 .
+      - name: Format check with Black
+        run: |
+          black --check .
+      - name: Test with pytest
+        run: |
+          pytest --junitxml=junit/test-results.xml
