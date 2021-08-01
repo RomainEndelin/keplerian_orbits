@@ -1,10 +1,11 @@
 from functools import cached_property
 
 import numpy as np
+from sympy.physics.units import gravitational_constant as G
 from sympy.utilities.lambdify import lambdify
 
-from engine.constants import G
-from engine.functions import anomaly, t
+from engine.constants import G as G_val
+from engine.functions.utils import anomaly, t
 from engine.symbolic_orbit import SymbolicOrbit
 from engine.symbolic_orbit_projection import SymbolicOrbitProjection
 
@@ -89,7 +90,7 @@ class KeplerianOrbit:
             body.pos_from(self.projection_backend.primary_body_as_point)
             # TODO: reference frame should be configurable, not always primary_body.equatorial_frame
             .to_matrix(self.primary_body.backend.equatorial_frame)
-            .subs({**self.eval_proper_parameters, G: G})
+            .subs({**self.eval_proper_parameters, G: G_val})
             .transpose()
             .tolist()[0],
         )

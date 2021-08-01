@@ -2,7 +2,8 @@ from functools import cached_property
 
 from sympy.physics.vector import Point
 
-from engine.functions import OrbitalVector, TrueAnomalyAtT
+from engine.functions.anomaly import TrueAnomalyAtT
+from engine.functions.state_vector import OrbitalVector
 
 
 class SymbolicOrbitProjection:
