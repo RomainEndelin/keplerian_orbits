@@ -2,7 +2,6 @@ from functools import cached_property
 
 import numpy as np
 from sympy.physics.units import gravitational_constant as G
-from sympy.utilities.lambdify import lambdify
 
 from engine.constants import G as G_val
 from engine.functions.utils import anomaly, t
@@ -52,17 +51,25 @@ class KeplerianOrbit:
             self.secondary_body.backend.mass: self.secondary_body.mass,
         }
 
-    @cached_property  # returns a function
-    def primary_body_position(self):
-        return self._make_body_position_lambda(
-            self.projection_backend.primary_body_as_point
-        )
+    def primary_body_position(self, t):
+        return self._body_position(self.projection_backend.primary_body_as_point, t)
 
-    @cached_property  # returns a function
-    def secondary_body_position(self):
-        return self._make_body_position_lambda(
-            self.projection_backend.secondary_body_as_point
-        )
+    def secondary_body_position(self, t):
+        return self._body_position(self.projection_backend.secondary_body_as_point, t)
+
+    def _body_position(self, body, t):
+        # TODO: reference frame should be configurable, not always primary_body.equatorial_frame
+        return [
+            float(i)
+            for i in (
+                body.pos_from(self.projection_backend.primary_body_as_point)
+                .to_matrix(self.primary_body.backend.equatorial_frame)
+                .subs({**self.eval_proper_parameters, G: G_val})
+                .subs(self.projection_backend.t, t)
+                .transpose()
+                .tolist()[0]
+            )
+        ]
 
     @cached_property
     def secondary_body_ellipse_points(self):
@@ -71,26 +78,16 @@ class KeplerianOrbit:
             for anomaly in np.linspace(0, 2 * np.pi, 500)
         ]
 
-    @cached_property  # returns a function
-    def _secondary_body_ellipse_point(self):
-        return lambdify(
-            (anomaly),
-            # TODO: reference frame should be configurable, not always primary_body.equatorial_frame
-            self.backend.orbital_ellipse_point.to_matrix(
-                self.primary_body.backend.equatorial_frame
+    def _secondary_body_ellipse_point(self, anomaly_value):
+        return [
+            float(i)
+            for i in (
+                self.backend.orbital_ellipse_point.to_matrix(
+                    self.primary_body.backend.equatorial_frame
+                )
+                .subs(self.eval_proper_parameters)
+                .subs(anomaly, anomaly_value)
+                .transpose()
+                .tolist()[0]
             )
-            .subs(self.eval_proper_parameters)
-            .transpose()
-            .tolist()[0],
-        )
-
-    def _make_body_position_lambda(self, body):
-        return lambdify(
-            (self.projection_backend.t),
-            body.pos_from(self.projection_backend.primary_body_as_point)
-            # TODO: reference frame should be configurable, not always primary_body.equatorial_frame
-            .to_matrix(self.primary_body.backend.equatorial_frame)
-            .subs({**self.eval_proper_parameters, G: G_val})
-            .transpose()
-            .tolist()[0],
-        )
+        ]
