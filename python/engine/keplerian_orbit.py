@@ -2,10 +2,11 @@ from functools import cached_property
 
 import numpy as np
 from sympy.physics.units import gravitational_constant as G
+from sympy.physics.vector import ReferenceFrame
 
 from engine.constants import G as G_val
 from engine.functions import OrbitalPeriod, OrbitalVector, TrueAnomalyAtT
-from engine.symbolic_orbit import SymbolicOrbit
+from engine.functions.reference_frame import OrbitalFrame
 
 
 class KeplerianOrbit:
@@ -30,16 +31,18 @@ class KeplerianOrbit:
         self.argument_of_periapsis = argument_of_periapsis
 
     @cached_property
-    def backend(self):
-        return SymbolicOrbit(self.primary_body.backend, self.secondary_body.backend)
+    def equatorial_frame(self):
+        return ReferenceFrame(f"E_{self.primary_body.name}")
 
     @cached_property
-    def eval_proper_parameters(self):
-        return {
-            self.backend.longitude_ascending_node: self.longitude_ascending_node,
-            self.backend.inclination: self.inclination,
-            self.backend.argument_of_periapsis: self.argument_of_periapsis,
-        }
+    def orbital_frame(self):
+        return OrbitalFrame(
+            f"O_{self.secondary_body.name}",
+            self.equatorial_frame,
+            self.longitude_ascending_node,
+            self.inclination,
+            self.argument_of_periapsis,
+        )
 
     @cached_property
     def period(self):
@@ -57,20 +60,11 @@ class KeplerianOrbit:
     def secondary_body_position_for_anomaly(self, true_anomaly):
         # TODO: reference frame should be configurable, not always primary_body.equatorial_frame
         orbital_state_vector = self.orbital_vector(true_anomaly)
-        equatorial_state_vector = orbital_state_vector.express(
-            self.backend.primary_body.equatorial_frame
-        )
+        equatorial_state_vector = orbital_state_vector.to_matrix(self.equatorial_frame)
 
         return [
             float(i)
-            for i in (
-                equatorial_state_vector.to_matrix(
-                    self.backend.primary_body.equatorial_frame
-                )
-                .subs({**self.eval_proper_parameters, G: G_val})
-                .transpose()
-                .tolist()[0]
-            )
+            for i in (equatorial_state_vector.subs(G, G_val).transpose().tolist()[0])
         ]
 
     def true_anomaly(self, t):
@@ -80,10 +74,7 @@ class KeplerianOrbit:
 
     def orbital_vector(self, true_anomaly):
         return OrbitalVector(
-            self.backend.orbital_frame,
-            self.semimajor_axis,
-            self.eccentricity,
-            true_anomaly,
+            self.orbital_frame, self.semimajor_axis, self.eccentricity, true_anomaly
         )
 
     @cached_property
