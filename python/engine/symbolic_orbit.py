@@ -2,9 +2,7 @@ from functools import cached_property
 
 from sympy import symbols
 
-from engine.functions.orbit_derived_parameters import OrbitalPeriod
-from engine.functions.reference_frame import OrbitalFrame
-from engine.functions.utils import EllipseInFrame
+from engine.functions import EllipseInFrame, OrbitalFrame, OrbitalPeriod
 
 
 class SymbolicOrbit:
