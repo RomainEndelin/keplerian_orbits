@@ -2,11 +2,14 @@ from functools import cached_property
 
 import numpy as np
 from sympy.physics.units import gravitational_constant as G
-from sympy.physics.vector import ReferenceFrame
 
 from engine.constants import G as G_val
-from engine.functions import OrbitalPeriod, OrbitalVector, TrueAnomalyAtT
-from engine.functions.reference_frame import OrbitalFrame
+from engine.functions import (
+    OrbitalPeriod,
+    OrbitalToEquatorialFrameDCM,
+    OrbitalVector,
+    TrueAnomalyAtT,
+)
 
 
 class KeplerianOrbit:
@@ -31,17 +34,9 @@ class KeplerianOrbit:
         self.argument_of_periapsis = argument_of_periapsis
 
     @cached_property
-    def equatorial_frame(self):
-        return ReferenceFrame(f"E_{self.primary_body.name}")
-
-    @cached_property
-    def orbital_frame(self):
-        return OrbitalFrame(
-            f"O_{self.secondary_body.name}",
-            self.equatorial_frame,
-            self.longitude_ascending_node,
-            self.inclination,
-            self.argument_of_periapsis,
+    def orbital_frame_dcm(self):
+        return OrbitalToEquatorialFrameDCM(
+            self.longitude_ascending_node, self.inclination, self.argument_of_periapsis
         )
 
     @cached_property
@@ -58,9 +53,8 @@ class KeplerianOrbit:
         return self.secondary_body_position_for_anomaly(anomaly)
 
     def secondary_body_position_for_anomaly(self, true_anomaly):
-        # TODO: reference frame should be configurable, not always primary_body.equatorial_frame
-        orbital_state_vector = self.orbital_vector(true_anomaly)
-        equatorial_state_vector = orbital_state_vector.to_matrix(self.equatorial_frame)
+        orbital_state_vector = self.orbital_vector_matrix(true_anomaly)
+        equatorial_state_vector = self.orbital_frame_dcm * orbital_state_vector
 
         return [
             float(i)
@@ -72,10 +66,8 @@ class KeplerianOrbit:
             self.true_anomaly_at_epoch, self.eccentricity, self.period, t
         )
 
-    def orbital_vector(self, true_anomaly):
-        return OrbitalVector(
-            self.orbital_frame, self.semimajor_axis, self.eccentricity, true_anomaly
-        )
+    def orbital_vector_matrix(self, true_anomaly):
+        return OrbitalVector(self.semimajor_axis, self.eccentricity, true_anomaly)
 
     @cached_property
     def secondary_body_ellipse_points(self):
