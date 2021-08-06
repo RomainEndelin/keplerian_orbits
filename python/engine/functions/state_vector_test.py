@@ -2,7 +2,6 @@ import math
 
 import pytest
 from pytest import param as p
-from sympy.physics.vector import ReferenceFrame
 
 from .state_vector import OrbitalRadius, OrbitalVector
 
@@ -16,11 +15,10 @@ from .state_vector import OrbitalRadius, OrbitalVector
     ],
 )
 def test_orbital_vector(semimajor_axis, eccentricity, true_anomaly, expected):
-    N = ReferenceFrame("N")
-    vector = OrbitalVector(N, semimajor_axis, eccentricity, true_anomaly)
-    assert N.x.dot(vector) == pytest.approx(expected[0], 1e-3)
-    assert N.y.dot(vector) == pytest.approx(expected[1], 1e-3)
-    assert N.z.dot(vector) == 0
+    vector = OrbitalVector(semimajor_axis, eccentricity, true_anomaly)
+    assert vector[0] == pytest.approx(expected[0], 1e-3)
+    assert vector[1] == pytest.approx(expected[1], 1e-3)
+    assert vector[2] == 0
 
 
 @pytest.mark.parametrize(

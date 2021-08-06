@@ -1,11 +1,10 @@
 from sympy import cos, sin
+from sympy.matrices import Matrix
 
 
-def OrbitalVector(orbital_frame, semimajor_axis, eccentricity, true_anomaly):
+def OrbitalVector(semimajor_axis, eccentricity, true_anomaly):
     radius = OrbitalRadius(semimajor_axis, eccentricity, true_anomaly)
-    return orbital_frame.x * radius * cos(
-        true_anomaly
-    ) + orbital_frame.y * radius * sin(true_anomaly)
+    return Matrix([radius * cos(true_anomaly), radius * sin(true_anomaly), 0])
 
 
 def OrbitalRadius(semimajor_axis, eccentricity, true_anomaly):

@@ -5,6 +5,7 @@ from sympy import symbols
 anomaly, t = symbols("anomaly t")
 
 
+# This function returns the same result as OrbitalVector, but with a different implementation
 def EllipseInFrame(frame, semimajor_axis, eccentricity, anomaly):
     # Anomaly is growing linearly here, independant from the true_anomaly
     orbit = Ellipse(
