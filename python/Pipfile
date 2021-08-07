@@ -18,6 +18,7 @@ scipy = "*"
 sympy = "*"
 plotly = "*"
 pandas = "*"
+manim = "*"
 
 [requires]
 python_version = "3.8"
